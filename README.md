@@ -53,18 +53,118 @@ To begin, ensure the following tools are installed on your system:
    cd house-price-predictor
    ```
 
-3. **Setup Python Virtual Environment using UV:**
+3. **Crear ambientes en Python usando**:
 
-   ```bash
-   uv venv --python python3.11
-   source .venv/bin/activate
-   ```
+1 . `requirements.txt` con `pip`
+2  . `environment.yml` con `conda`
 
-4. **Install dependencies:**
+---
 
-   ```bash
-   uv pip install -r requirements.txt
-   ```
+## 🧪 1. Crear un ambiente con `requirements.txt` (usando `pip` y `venv`)
+
+El archivo `requirements.txt` contiene una lista de paquetes con sus versiones, como esta:
+
+```txt
+# Python version: 3.10.12
+pandas==2.1.3
+numpy==1.24.4
+scikit-learn==1.3.2
+...
+```
+
+### ✅ Pasos para crear el ambiente con `pip`:
+
+```bash
+# 1. Crear un entorno virtual (por ejemplo, llamado 'venv')
+python -m venv venv
+
+# 2. Activar el entorno:
+# En Windows:
+venv\Scripts\activate
+
+# En macOS/Linux:
+source venv/bin/activate
+
+# 3. Instalar los paquetes desde requirements.txt
+pip install -r requirements.txt
+
+# 4. Verificar que los paquetes estén instalados
+pip list
+
+# (Opcional) 5. Desactivar el entorno cuando termines
+deactivate
+```
+
+---
+
+## 🧬 2. Crear un ambiente con `environment.yml` (usando `conda`)
+
+El archivo `environment.yml` se usa con `conda` o `mamba` y tiene un formato como:
+
+```yaml
+name: my_env
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.10.12
+  - pandas=2.1.3
+  - numpy=1.24.4
+  - scikit-learn=1.3.2
+  ...
+```
+
+### ✅ Pasos para crear el ambiente con `conda`:
+
+```bash
+# 1. Crear el entorno a partir del archivo environment.yml
+conda env create -f environment.yml
+
+# 2. Activar el entorno (usa el nombre definido en el archivo, por ejemplo 'my_env')
+conda activate my_env
+
+# 3. Verificar que los paquetes estén instalados
+conda list
+
+# (Opcional) 4. Desactivar el entorno cuando termines
+conda deactivate
+```
+
+### 🔄 Si el entorno ya existe y quieres actualizarlo:
+
+```bash
+conda env update -f environment.yml --prune
+```
+
+> `--prune` elimina paquetes que ya no están listados en el `.yml`
+
+---
+
+## ⚠️ Recomendaciones
+
+* Usa `conda` si trabajas con paquetes científicos pesados como `tensorflow`, `xgboost` o `mlflow` (mejor manejo de dependencias).
+* Usa `pip` si necesitas algo más liviano o en entornos donde no puedes instalar `conda`.
+* Puedes combinar ambos: usar `conda` para el ambiente base y `pip` para instalar lo que falte.
+
+
+## Uso ``Script env_builder.py``
+
+```bash
+# Ejecuta el script
+python env_builder.py
+```
+
+### 🔧 Qué hace este script
+
+* Detecta versiones de los paquetes instalados.
+* Genera:
+
+  * `requirements.txt` para `pip`
+  * `environment.yml` para `conda`
+* Usa los canales `defaults` y `conda-forge` (puedes modificar esto).
+* Asigna el nombre del entorno como `"my_env"` (puedes cambiarlo en `env_name`).
+
+
 
 ---
 
@@ -74,7 +174,7 @@ To track experiments and model runs:
 
 ```bash
 cd deployment/mlflow
-docker compose -f mlflow-docker-compose.yml up -d
+docker compose -f docker-compose.yaml up -d
 docker compose ps
 ```
 
@@ -94,8 +194,6 @@ Access the MLflow UI at [http://localhost:5555](http://localhost:5555)
 If you prefer an interactive experience, launch JupyterLab with:
 
 ```bash
-uv python -m jupyterlab
-# or
 python -m jupyterlab
 ```
 
@@ -128,7 +226,9 @@ python src/features/engineer.py   --input data/processed/cleaned_house_data.csv 
 Train your model and log everything to MLflow:
 
 ```bash
-python src/models/train_model.py   --config configs/model_config.yaml   --data data/processed/featured_house_data.csv   --models-dir models   --mlflow-tracking-uri http://localhost:5555
+python src/models/train_model.py   --config configs/best_model_config.yaml  --data data/processed/featured_house_data.csv   --models-dir models   --mlflow-tracking-uri http://localhost:5555
+
+python src/models/train_model.py --config-path models/best_model_config.yaml --data-dir data/processed --models-dir models --mlflow-tracking-uri http://localhost:5555
 ```
 
 ---

@@ -1,0 +1,44 @@
+best_model_name: Ridge
+features:
+- sqft
+- bedrooms
+- bathrooms
+- house_age
+- price_per_sqft
+- bed_bath_ratio
+- location_Downtown
+- location_Mountain
+- location_Rural
+- location_Suburb
+- location_Urban
+- location_Waterfront
+- condition
+metrics:
+  mae: 8315.990023063692
+  r2: 0.9924486576748188
+  rmse: !!python/object/apply:numpy._core.multiarray.scalar
+  - !!python/object/apply:numpy.dtype
+    args:
+    - f8
+    - false
+    - true
+    state: !!python/tuple
+    - 3
+    - <
+    - null
+    - null
+    - null
+    - -1
+    - -1
+    - 0
+  - !!binary |
+    n5ghQKpQ0kA=
+parameters:
+  alpha: 0.1
+  copy_X: true
+  fit_intercept: true
+  max_iter: null
+  positive: false
+  random_state: null
+  solver: auto
+  tol: 0.0001

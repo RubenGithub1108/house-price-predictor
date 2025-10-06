@@ -8,6 +8,9 @@ venv/
 .env/
 .envrc
 
+# Ignore virtual environment conda
+# environment.yml
+
 # Ignore Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
